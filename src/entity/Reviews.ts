@@ -19,4 +19,7 @@ export class Reviews extends BaseEntity {
 
     @Column()
     rating!: number;
+
+    @Column("tsvector", {select: false})
+    document_with_id: any;
 }

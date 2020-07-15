@@ -1,19 +1,21 @@
-import {Router} from 'express';
-import {getAll, getReview} from '../utils/data_handler';
+import {Router, Request, Response} from 'express';
+import {getAll, getReview, querySearch} from '../utils/data_handler';
 
 const router = Router();
 
-// router.get('/search/:query', async(req, res) => {
-//     const reviews = await getData("SELECT * FROM reviews ")
-//     res.json(reviews)
-// })
+router.get('/search', async(req: Request, res: Response) => {
+    const query = req.body.query || null;
+    if(!query) res.status(404).json({error: "No query provided"})
+    const results = await querySearch(query);
+    res.json(results.length !== 0 ? results : {msg: "No reviews found"})
+})
 
-router.get('/:title', async(req, res) => {
+router.get('/:title', async(req: Request, res: Response) => {
     const review = await getReview(req.params.title)
     res.json(review);
 })
 
-router.get('/', async(req, res) => {
+router.get('/', async(req: Request, res: Response) => {
     const reviews = await getAll();
     res.json(reviews)
 })
