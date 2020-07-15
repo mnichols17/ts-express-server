@@ -4,9 +4,8 @@ import {getAll, getReview, querySearch} from '../utils/data_handler';
 const router = Router();
 
 router.get('/search', async(req: Request, res: Response) => {
-    const query = req.body.query || null;
-    if(!query) res.status(404).json({error: "No query provided"})
-    const results = await querySearch(query);
+    if(!req.body.query) return res.status(404).json({error: "No query provided"})
+    const results = await querySearch(req.body.query);
     res.json(results.length !== 0 ? results : {msg: "No reviews found"})
 })
 
