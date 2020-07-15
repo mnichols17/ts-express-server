@@ -1,3 +1,3 @@
 # TS-EXPRESS-SERVER
 
-### Back-end express server written in TS for test site
+#### Express server written in TypeScript. Uses [TypeORM](https://typeorm.io/#/) to connect/query a postgresSQL database
