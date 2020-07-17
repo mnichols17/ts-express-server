@@ -1,13 +1,14 @@
 import 'reflect-metadata';
 import {Reviews} from '../entity/Reviews';
 
-type Sort = "ASC" | "DESC" | false;
+type Sort = "ASC" | "DESC" | "";
 
-// Middlewar to handle query? (, The -> The, remove (2020))
-export const querySearch = async(query: string, sort: Sort) => {
+export const querySearch = async(query: string, sort: Sort, count: number) => {
     return await Reviews.createQueryBuilder('reviews')
             .where(`document_with_id @@ to_tsquery('movies', (:query))`, {query})
-            .orderBy(sort ? {"reviews.rating": sort} : {})
+            .orderBy(sort !== "" ? {"reviews.rating": sort} : {})
+            .skip(25*count)
+            .take(25)
             .getMany()
     // if(sort) {
     //     return await Reviews.createQueryBuilder('reviews')
@@ -22,7 +23,15 @@ export const querySearch = async(query: string, sort: Sort) => {
     // }
 }
 
-export const getAll = async(sort: Sort) => {
+export const getAll = async(sort: Sort, count: number) => {
+    return await Reviews.createQueryBuilder('reviews')
+            .orderBy(sort !== "" ? {"reviews.rating": sort} : {})
+            .skip(50*count)
+            .take(50)
+            .getMany();
+}
+
+export const getAllTest = async() => {
     return await Reviews.find();
 }
 
