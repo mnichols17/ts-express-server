@@ -3,23 +3,38 @@ import { BaseEntity, Entity, Column, PrimaryColumn} from "typeorm";
 @Entity()
 export class Reviews extends BaseEntity {
     @PrimaryColumn()
-    title!: string;
+    rank!: number;
 
     @Column()
-    genre!: string;
+    movie!: string;
+
+    @Column()
+    total!: number;
 
     @Column()
     director!: string;
 
     @Column()
+    genre!: string;
+
+    @Column()
     subgenre!: string;
 
     @Column()
-    language!: string;
+    universe!: string;
 
     @Column()
-    rating!: number;
+    subuniverse!: string;
 
-    @Column("tsvector", {select: false})
+    @Column()
+    character!: string;
+
+    @Column()
+    sportholiday!: string;
+
+    @Column()
+    year!: number;
+
+    @Column("tsvector", {select: true})
     document_with_id: any;
 }

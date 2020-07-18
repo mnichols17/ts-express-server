@@ -26,8 +26,8 @@ router.get('/all', async(req: Request, res: Response) => {
     res.json(reviews)
 })
 
-router.get('/title', async(req: Request, res: Response) => {
-    const review: Reviews | undefined = await getReview(req.params.title)
+router.get('/movie/:movie', async(req: Request, res: Response) => {
+    const review: Reviews | undefined = await getReview(req.params.movie)
     res.json(review);
 })
 
