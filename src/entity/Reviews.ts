@@ -37,4 +37,7 @@ export class Reviews extends BaseEntity {
 
     @Column("tsvector", {select: true})
     document_with_id: any;
+
+    @Column()
+    poster!: string;
 }
