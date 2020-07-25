@@ -10,7 +10,7 @@ createConnection()
     const app = express();
     const port = process.env.PORT || 5000;
 
-    // Might need for deployment
+    // Test on deployment
     // const corsOptions = {
     //     origin: "http://localhost:3000/",
     //     optionsSuccessStatus: 200

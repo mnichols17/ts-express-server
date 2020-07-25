@@ -35,6 +35,9 @@ export class Reviews extends BaseEntity {
     @Column()
     year!: number;
 
+    @Column()
+    decade!: number;
+
     @Column("tsvector", {select: true})
     document_with_id: any;
 
