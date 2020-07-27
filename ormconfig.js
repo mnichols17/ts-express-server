@@ -1,4 +1,4 @@
-module.exports = process.env.NODE_ENV ? {
+module.exports = process.env.NODE_ENV !== 'production' ? {
     "type": "postgres",
     "host": "localhost", // DEVELOPMENT
     "port": 5432, // DEVELOPMENT

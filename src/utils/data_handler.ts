@@ -33,6 +33,7 @@ export const getReview = async(rank: number) => {
     const providers = await getStreaming(review.movie, parseInt(review.id));
     return [review, providers];
 }
+
 const p_ids:number[] = [10, 2, 3, 192, 9, 352, 350, 78, 289, 258, 358, 337, 34, 105, 
                             331, 257, 123, 384, 27, 212, 15, 238, 191, 8, 386, 387, 207, 
                             37, 43, 215, 363, 73, 322, 31]
