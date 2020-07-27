@@ -23,7 +23,6 @@ router.get('/search', handleQuery, async(req: Request, res: Response) => {
 })
 
 router.get('/all', async(req: Request, res: Response) => {
-    console.log(req.headers)
     const {directors, genres, subgenres, universes, subuniverses, characters, sportholidays, years, decades} = req.headers;
     const reviews: Reviews[] = await getReviews(req.headers.sort as Sort, parseInt(req.headers.skip as string), directors as string, genres as string, subgenres as string, universes as string, subuniverses as string, characters as string, sportholidays as string, years as string, decades as string);
     res.json(reviews)
@@ -31,7 +30,7 @@ router.get('/all', async(req: Request, res: Response) => {
 
 router.get('/movie/:rank', async(req: Request, res: Response) => {
     try{
-        const review: Reviews | undefined = await getReview(parseInt(req.params.rank))
+        const review: any[] | undefined = await getReview(parseInt(req.params.rank))
         res.json(review);
     } catch(e) {
         res.json([]);

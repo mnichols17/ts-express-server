@@ -43,4 +43,16 @@ export class Reviews extends BaseEntity {
 
     @Column()
     poster!: string;
+
+    @Column()
+    id!: string;
+
+    @Column()
+    plot!: string;
+
+    @Column()
+    actors!: string;
+
+    @Column()
+    video_key!: string;
 }
