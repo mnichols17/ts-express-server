@@ -1,8 +1,11 @@
-import { BaseEntity, Entity, Column, PrimaryColumn} from "typeorm";
+import { BaseEntity, Entity, Column, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class Reviews extends BaseEntity {
+export class Review extends BaseEntity {
     @PrimaryColumn()
+    id!: number;
+
+    @Column()
     rank!: number;
 
     @Column()
@@ -21,6 +24,9 @@ export class Reviews extends BaseEntity {
     subgenre!: string;
 
     @Column()
+    studiocompany!: string;
+
+    @Column()
     universe!: string;
 
     @Column()
@@ -36,16 +42,13 @@ export class Reviews extends BaseEntity {
     year!: number;
 
     @Column()
-    decade!: number;
+    decade!: string;
 
     @Column("tsvector", {select: true})
     document_with_id: any;
 
     @Column()
     poster!: string;
-
-    @Column()
-    id!: string;
 
     @Column()
     plot!: string;
@@ -55,4 +58,13 @@ export class Reviews extends BaseEntity {
 
     @Column()
     video_key!: string;
+
+    @Column()
+    runtime!: number;
+
+    @Column()
+    oscars!: string;
+
+    @Column()
+    goldenglobes!: string;
 }
