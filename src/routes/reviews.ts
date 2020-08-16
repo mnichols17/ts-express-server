@@ -2,7 +2,8 @@ import {Router, Request, Response, NextFunction} from 'express';
 import {getReviews, getReview, getRandom, getLanding} from '../utils/data_handler';
 import {Review} from '../entity/Review';
 
-type Sort = "ASC" | "DESC"
+type Sort = "ASC" | "DESC";
+type Ratings = "avg" | "jeff" | "kenjac";
 
 const router = Router();
 
@@ -22,30 +23,30 @@ router.get('/landing', async(req: Request, res: Response) => {
 })
 
 router.get('/search', handleQuery, async(req: Request, res: Response) => {
-    const {directors, genres, subgenres, studiocompanies, universes, subuniverses, 
-        characters, sportholidays, years, decades, providers, oscars, goldenglobes} = req.headers;
+    const {sort, ratings, directors, genres, subgenres, studiocompanies, universes, subuniverses, 
+        characters, sportholidays, years, decades, providers, awards} = req.headers;
 
-    const results: Review[] = await getReviews(req.headers.sort as Sort, parseInt(req.headers.skip as string), 
+    const results: Review[] = await getReviews(sort as Sort, ratings as Ratings, parseInt(req.headers.skip as string), 
     directors as string, genres as string, subgenres as string, studiocompanies as string, universes as string, subuniverses as string, 
-    characters as string, sportholidays as string, years as string, decades as string, providers as string, oscars as string, goldenglobes as string, req.body.query);
+    characters as string, sportholidays as string, years as string, decades as string, providers as string, awards as string, req.body.query);
 
     res.json(results)
 })
 
 router.get('/all', async(req: Request, res: Response) => {
-    const {directors, genres, subgenres, studiocompanies, universes, subuniverses, 
-        characters, sportholidays, years, decades, providers, oscars, goldenglobes} = req.headers;
+    const {sort, ratings, directors, genres, subgenres, studiocompanies, universes, subuniverses, 
+        characters, sportholidays, years, decades, providers, awards} = req.headers;
 
-    const reviews: Review[] = await getReviews(req.headers.sort as Sort, parseInt(req.headers.skip as string), 
+    const reviews: Review[] = await getReviews(sort as Sort, ratings as Ratings,  parseInt(req.headers.skip as string), 
     directors as string, genres as string, subgenres as string, studiocompanies as string, universes as string, subuniverses as string, 
-    characters as string, sportholidays as string, years as string, decades as string, providers as string, oscars as string, goldenglobes as string);
+    characters as string, sportholidays as string, years as string, decades as string, providers as string, awards as string);
 
     res.json(reviews)
 })
 
-router.get('/movie/:rank', async(req: Request, res: Response) => {
+router.get('/movie/:id', async(req: Request, res: Response) => {
     try{
-        const review: any[] | undefined = await getReview(parseInt(req.params.rank))
+        const review: any[] | undefined = await getReview(parseInt(req.params.id))
         res.json(review);
     } catch(e) {
         res.json([]);
@@ -53,11 +54,10 @@ router.get('/movie/:rank', async(req: Request, res: Response) => {
 })
 
 router.get('/random', async(req: Request, res: Response) => {
-    const {genres, decades, providers} = req.headers;
-    const reviews: Review[] = await getRandom(genres as string, decades as string, providers as string);
+    const {genres, subgenres, decades, providers, min} = req.headers;
+    const reviews: Review[] = await getRandom(genres as string, subgenres as string, decades as string, providers as string, parseInt(min as string));
     const index = (Math.floor(Math.random()*reviews.length) + 1)
     res.json(reviews[index-1])
 })
-
 
 export default router;

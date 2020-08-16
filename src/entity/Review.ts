@@ -6,13 +6,28 @@ export class Review extends BaseEntity {
     id!: number;
 
     @Column()
-    rank!: number;
+    avgrank!: number;
 
     @Column()
     movie!: string;
 
     @Column()
-    total!: number;
+    avgtotal!: number;
+
+    @Column()
+    jlrank!: number;
+
+    @Column()
+    jeff!: number;
+
+    @Column()
+    kjrank!: number;
+
+    @Column()
+    kenjac!: number;
+
+    @Column()
+    buttered!: boolean;
 
     @Column()
     director!: string;
@@ -67,4 +82,13 @@ export class Review extends BaseEntity {
 
     @Column()
     goldenglobes!: string;
+
+    @Column()
+    rt!: string;
+
+    @Column()
+    imdb!: string;
+
+    @Column()
+    metacritic!: string;
 }
