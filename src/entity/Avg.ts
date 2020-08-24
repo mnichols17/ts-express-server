@@ -1,11 +1,8 @@
 import { BaseEntity, Entity, Column, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class Review extends BaseEntity {
+export class Avg extends BaseEntity {
     @PrimaryColumn()
-    id!: number;
-
-    @Column()
     avgrank!: number;
 
     @Column()
@@ -62,29 +59,11 @@ export class Review extends BaseEntity {
     @Column()
     decade!: string;
 
-    @Column("tsvector", {select: true})
-    document_with_id: any;
-
-    @Column()
-    poster!: string;
-
-    @Column()
-    plot!: string;
-
-    @Column()
-    actors!: string;
-
-    @Column()
-    video_key!: string;
-
-    @Column()
-    runtime!: number;
-
-    @Column()
-    oscar_winner!: boolean;
-
     @Column()
     oscars!: string;
+
+    @Column()
+    goldenglobes!: string;
 
     @Column()
     oscars_animated!: string;
@@ -108,7 +87,26 @@ export class Review extends BaseEntity {
     support_actress!: string;
 
     @Column()
-    goldenglobes!: string;
+    itunes!: string;
+
+    @Column()
+    spotify!: string;
+
+    // FROM TMDB
+    @Column()
+    runtime!: number;
+
+    @Column()
+    poster!: string;
+
+    @Column()
+    plot!: string;
+
+    @Column()
+    video_key!: string;
+
+    @Column()
+    actors!: string;
 
     @Column()
     rt!: string;
@@ -118,10 +116,4 @@ export class Review extends BaseEntity {
 
     @Column()
     metacritic!: string;
-    
-    @Column()
-    itunes!: string;
-
-    @Column()
-    spotify!: string;
 }

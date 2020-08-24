@@ -6,9 +6,9 @@ export class Streaming extends BaseEntity {
     @Column()
     review_id!: number;
 
-    @PrimaryColumn()
+    @Column()
     url!: string;
 
-    @Column()
+    @PrimaryColumn()
     provider_id!: number;
 }
