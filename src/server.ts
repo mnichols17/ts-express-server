@@ -7,7 +7,9 @@ import cluster from 'cluster';
 import redis, { ClientOpts } from 'redis';
 
 const numCPUs = require('os').cpus().length;
-const client = process.env.NODE_ENV === 'production'? redis.createClient(process.env.REDIS_URL as ClientOpts) : redis.createClient();
+const client = process.env.NODE_ENV === 'production'? 
+        redis.createClient(process.env.REDIS_URL as ClientOpts) 
+        : redis.createClient();
 
 if(cluster.isMaster) {
     console.log(`Master ${process.pid} is running`)
@@ -29,13 +31,23 @@ if(cluster.isMaster) {
         client.flushall('ASYNC', () => {
             console.log("Flushing cache")
         });
-        // Test on deployment
-        // const corsOptions = {
-        //     origin: "http://localhost:3000/",
-        //     optionsSuccessStatus: 200
-        // }
 
-        app.use(cors());
+        const whitelist = ["http://10.0.0.12:3000", "http://localhost:3000"]
+
+        const corsOptions = process.env.NODE_ENV !== 'production'?
+        {
+            origin: (origin: any, callback:any) => {
+                if(whitelist.indexOf(origin) === -1){
+                    return callback(new Error('INVALID ORIGIN'), false)
+                }
+                return callback(null, true);
+            }
+        }
+        :{ 
+            origin: "https://www.movierankings.net"
+        }
+
+        app.use(cors(corsOptions))
         app.use(express.json());
         app.use('/reviews', reviewsRouter)
 

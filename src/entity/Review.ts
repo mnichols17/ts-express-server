@@ -81,6 +81,9 @@ export class Review extends BaseEntity {
     runtime!: number;
 
     @Column()
+    revenue!: number;
+
+    @Column()
     oscar_winner!: boolean;
 
     @Column()

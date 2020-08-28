@@ -6,10 +6,9 @@ import {Streaming} from '../entity/Streaming';
 // import axios from 'axios';
 import { Brackets, Not, In } from 'typeorm';
 
-type Sort = "ASC" | "DESC";
 type Ratings = "avg" | "jeff" | "kenjac";
 
-export const getReviews = async(sort: Sort, ratings: Ratings, count: number, page: number, directors: string, 
+export const getReviews = async(sort: string, ratings: Ratings, count: number, page: number, directors: string, 
                                     genres: string, subgenres: string, studiocompanies: string, universes: string, 
                                     subuniverses: string, characters: string, sportholidays: string, years: string, 
                                     decades: string, providers: string, awards: string, runtime: string, ratingRange: string,
@@ -18,30 +17,31 @@ export const getReviews = async(sort: Sort, ratings: Ratings, count: number, pag
     let total = 'reviews.avgtotal';
     let rank = 'reviews.avgrank';
     let order = {};
-   
-    count = (count + (4 * (page-1)))
-
-    switch(ratings){
-        case("jeff"):
-            total = 'reviews.jeff';
-            rank = 'reviews.jlrank';
-            order = {'reviews.jlrank': sort};
-            break;
-        case('kenjac'):
-            total = 'reviews.kenjac';
-            rank = 'reviews.kjrank';
-            order = {'reviews.kjrank': sort};
-            break;
-        default:
-            order = {'reviews.avgrank': sort};
-    }
-
-    let rangeQuery = `${total} BETWEEN :minRating AND :maxRating`
-    const range = ratingRange.split('@')
     
     try {
+        count = (count + (4 * (page-1)))
+        const range = ratingRange.split('@')
+        const sortValues = sort.split('@');
+
+        switch(ratings){
+            case("jeff"):
+                total = 'reviews.jeff';
+                rank = 'reviews.jlrank';
+                order = {'reviews.jlrank': sortValues[1]};
+                break;
+            case('kenjac'):
+                total = 'reviews.kenjac';
+                rank = 'reviews.kjrank';
+                order = {'reviews.kjrank': sortValues[1]};
+                break;
+            default:
+                order = {'reviews.avgrank': sortValues[1]};
+        }
+
+        let rangeQuery = `${total} BETWEEN :minRating AND :maxRating`
+
         const query = Review.createQueryBuilder('reviews')
-            .select([rank, 'reviews.movie', 'reviews.poster', total, 'reviews.id', 'reviews.oscar_winner', 'reviews.goldenglobes'])
+            .select([rank, 'reviews.movie', 'reviews.poster', total, 'reviews.id', 'reviews.oscar_winner', 'reviews.goldenglobes', 'reviews.year'])
             .where("reviews.runtime BETWEEN 15 AND :runtime", {runtime})
             .andWhere(rangeQuery, {minRating: range[0], maxRating: range[1]})
         if(providers.length) query.leftJoin(Streaming, 's', 'reviews.id = s.review_id')
@@ -67,7 +67,7 @@ export const getReviews = async(sort: Sort, ratings: Ratings, count: number, pag
                 .orWhere("reviews.goldenglobes IN (:...goldenglobes)", {goldenglobes: awards.split('@')})
         }))
         const resultsTotal = await query.getCount();
-        const results = await query.orderBy(order)
+        const results = await query.orderBy(sortValues[0] === "year"? {'reviews.year': sortValues[1] as ("ASC" | "DESC"), 'reviews.id': 'ASC'}  : order)
             .skip(30*count)
             .take(30)
             .getMany();
@@ -114,7 +114,10 @@ export const getRandom = async(genres: string, subgenres: string, decades: strin
         if(subgenres.length) query.andWhere("reviews.subgenre IN (:...subgenres)", { subgenres: subgenres.split('@')})  
         if(providers.length) query.andWhere('s.provider_id IN (:...providers)', {providers: providers.split('@')})
         if(decades.length) query.andWhere("reviews.decade IN (:...decades)", {decades: decades.split('@')})
-        return await query.getMany();
+        const reviews = await query.getMany();
+        const index = (Math.floor(Math.random()*reviews.length) + 1)-1;
+        const streamingOptions = await Streaming.find({review_id: reviews[index].id})
+        return[reviews[index], streamingOptions]
     } catch(e) {
         return [];
     }
@@ -122,7 +125,7 @@ export const getRandom = async(genres: string, subgenres: string, decades: strin
 
 const newest = [605116, 531499, 628917, 587792, 516486, 547016, 706510, 592834, 595148];
 const jeff = [10403, 2062, 1847, 592, 429200, 931, 351, 14756, 306947, 1878];
-const kenjac = [465914, 583, 5503, 22947, 389015, 429200, 363088, 64689, 22803];
+const kenjac = [496243, 314365, 402897, 8321, 565310, 546554, 2493, 7446, 522039, 152532];
 
 export const getLanding = async() => {
     const lists: Review[][] = [];

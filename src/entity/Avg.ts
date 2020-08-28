@@ -103,6 +103,9 @@ export class Avg extends BaseEntity {
     plot!: string;
 
     @Column()
+    revenue!: number;
+
+    @Column()
     video_key!: string;
 
     @Column()
