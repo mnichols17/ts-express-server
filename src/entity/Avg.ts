@@ -2,10 +2,12 @@ import { BaseEntity, Entity, Column, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Avg extends BaseEntity {
-    @PrimaryColumn()
+    //@PrimaryColumn()
+    @Column()
     avgrank!: number;
 
-    @Column()
+    //@Column()
+    @PrimaryColumn()
     movie!: string;
 
     @Column()
@@ -103,7 +105,7 @@ export class Avg extends BaseEntity {
     plot!: string;
 
     @Column()
-    revenue!: number;
+    revenue!: string;
 
     @Column()
     video_key!: string;

@@ -48,9 +48,21 @@ export const getReviews = async(sort: string, ratings: Ratings, count: number, p
         if(providers.length) query.andWhere('s.provider_id IN (:...providers)', {providers: providers.split('@')})
         if(searchquery) query.andWhere(`document_with_id @@ to_tsquery('movie_no_stop', (:searchquery))`, {searchquery})
         if(directors.length) query.andWhere("reviews.director IN (:...directors)", { directors: directors.split('@')})
-        if(genres.length) query.andWhere("reviews.genre IN (:...genres)", { genres: genres.split('@')})
+        if(genres.length) query.andWhere(new Brackets(qb => {
+            genres.split('@').forEach((g:string, index: number) => {
+                const parameter = {['g_' + index]: `%${g}%`};
+                !index? qb.where(`reviews.genre LIKE :g_${index}`, parameter) 
+                : qb.orWhere(`reviews.genre LIKE :g_${index}`, parameter) ;
+            })
+        }))
         if(subgenres.length) query.andWhere("reviews.subgenre IN (:...subgenres)", {subgenres: subgenres.split('@')})
-        if(studiocompanies.length) query.andWhere("reviews.studiocompany IN (:...studiocompanies)", {studiocompanies: studiocompanies.split('@')})
+        if(studiocompanies.length) query.andWhere(new Brackets(qb => {
+            studiocompanies.split('@').forEach((sc:string, index: number) => {
+                const parameter = {['sc_' + index]: `%${sc}%`};
+                !index? qb.where(`reviews.studiocompany LIKE :sc_${index}`, parameter) 
+                : qb.orWhere(`reviews.studiocompany LIKE :sc_${index}`, parameter) ;
+            })
+        }))
         if(universes.length) query.andWhere("reviews.universe IN (:...universes)", {universes: universes.split('@')})
         if(subuniverses.length) query.andWhere("reviews.subuniverse IN (:...subuniverses)", {subuniverses: subuniverses.split('@')})
         if(characters.length) query.andWhere("reviews.character IN (:...characters)", {characters: characters.split('@')})
@@ -123,24 +135,29 @@ export const getRandom = async(genres: string, subgenres: string, decades: strin
     }
 }
 
-const newest = [605116, 531499, 628917, 587792, 516486, 547016, 706510, 592834, 595148];
-const jeff = [10403, 2062, 1847, 592, 429200, 931, 351, 14756, 306947, 1878];
-const kenjac = [496243, 314365, 402897, 8321, 565310, 546554, 2493, 7446, 522039, 152532];
+const chadwick = [299536, 581859, 299534, 284054, 271110, 392982, 109410, 239566, 14325, 301355];
+const newest = [577922, 340102, 501979, 508570, 625568, 520900, 718444, 493065, 605116, 531499];
+const jeff = [83666, 153, 925, 489930, 9040, 396535, 146233, 493922, 10218, 437586];
+const kenjac = [38, 241848, 103731, 529485, 679, 55721, 8358, 562, 399170, 59440];
 
 export const getLanding = async() => {
     const lists: Review[][] = [];
     let cycle = 0;
-    for(let i = 0; i < 7; i++){
+    for(let i = 0; i < 8; i++){
         const total = !cycle? 'reviews.avgtotal' : cycle === 1? 'reviews.jeff' : 'reviews.kenjac';
         const rank = !cycle? 'reviews.avgrank' : cycle === 1? 'reviews.jlrank' : 'reviews.kjrank';
 
         const query = Review.createQueryBuilder('reviews')
             .select([rank, total, 'reviews.movie', 'reviews.poster', 'reviews.id', 'reviews.buttered', 'reviews.oscar_winner', 'reviews.goldenglobes'])
         if(i === 6) query.where('reviews.year = :year', {year: 2020})
+        else if(i === 7) query.where('reviews.id IN (:...ids)', {ids: chadwick})
         else if(i < 3) query.where('reviews.id IN (:...ids)', {ids: i === 0? newest : i === 1? jeff:kenjac})
-        query.orderBy(!cycle? {"reviews.avgrank": "ASC"} : cycle === 1? {"reviews.jlrank": "ASC"} : {"reviews.kjrank": "ASC"})
+        query.orderBy((!cycle)? {"reviews.avgrank": "ASC"} : cycle === 1? {"reviews.jlrank": "ASC"} : {"reviews.kjrank": "ASC"})
         if(i !== 2) query.take(10)
-        lists[i] = await query.getMany();
+        if(i === 7) lists.unshift(await query.getMany())
+        else {
+            lists[i] = await query.getMany();
+        }
         if(i === 0){
             const copy = [...lists[i]];
             copy.forEach((c:Review) => {
@@ -148,7 +165,7 @@ export const getLanding = async() => {
                 lists[i][index] = c;
             })
         }
-        cycle = (i+1)%3 === 0? 0 : cycle + 1;
+        cycle = ((i+1)%3 === 0 || i === 6)? 0 : cycle + 1;
     }
     return lists;
 }
