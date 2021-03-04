@@ -21,21 +21,33 @@
   "homepage": "https://github.com/mnichols17/ts-express-server#readme",
   "dependencies": {
     "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "connect-redis": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "justwatch-api": "^1.0.7",
+    "nodemailer": "^6.4.11",
     "pg": "^8.3.0",
     "redis": "^3.0.2",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.25"
+    "typeorm": "^0.2.25",
+    "uuid": "^8.3.0",
+    "yup": "^0.29.3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/connect-redis": "0.0.14",
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.7",
+    "@types/express-session": "^1.17.0",
     "@types/node": "^14.0.23",
+    "@types/nodemailer": "^6.4.0",
     "@types/pg": "^7.14.4",
     "@types/redis": "^2.8.25",
+    "@types/uuid": "^8.3.0",
+    "@types/yup": "^0.29.6",
     "ts-node-dev": "^1.0.0-pre.51",
     "typescript": "^3.9.6"
   }

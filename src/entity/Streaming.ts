@@ -1,5 +1,4 @@
 import { BaseEntity, Entity, Column, PrimaryColumn, ManyToOne} from "typeorm";
-import { Review } from "./Review";
 
 @Entity()
 export class Streaming extends BaseEntity {

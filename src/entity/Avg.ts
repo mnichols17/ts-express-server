@@ -2,11 +2,9 @@ import { BaseEntity, Entity, Column, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Avg extends BaseEntity {
-    //@PrimaryColumn()
-    @Column()
+    @PrimaryColumn()
     avgrank!: number;
 
-    //@Column()
     @PrimaryColumn()
     movie!: string;
 
@@ -28,7 +26,7 @@ export class Avg extends BaseEntity {
     @Column()
     buttered!: boolean;
 
-    @Column()
+    @PrimaryColumn()
     director!: string;
 
     @Column()
@@ -44,7 +42,7 @@ export class Avg extends BaseEntity {
     universe!: string;
 
     @Column()
-    subuniverse!: string;
+    // subuniverse!: string;
 
     @Column()
     character!: string;

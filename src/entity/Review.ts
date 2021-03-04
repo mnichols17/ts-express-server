@@ -1,11 +1,12 @@
 import { BaseEntity, Entity, Column, PrimaryColumn } from "typeorm";
+import { redis_client } from "../utils/redis_client";
 
 @Entity()
 export class Review extends BaseEntity {
     @PrimaryColumn()
     id!: number;
 
-    @Column()
+    @PrimaryColumn()
     avgrank!: number;
 
     @Column()
@@ -44,8 +45,8 @@ export class Review extends BaseEntity {
     @Column()
     universe!: string;
 
-    @Column()
-    subuniverse!: string;
+    // @Column()
+    // subuniverse!: string;
 
     @Column()
     character!: string;
@@ -127,4 +128,8 @@ export class Review extends BaseEntity {
 
     @Column()
     spotify!: string;
+
+    listed: boolean = false;
+
+    seen: boolean = false;
 }
