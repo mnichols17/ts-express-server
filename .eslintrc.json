@@ -1,0 +1,33 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "babel-eslint",
+  "plugins": ["react", "react-hooks", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "rules": {
+    "react/display-name": [0, "error"],
+    "react/no-unescaped-entities": [0, "error"],
+    "react/prop-types": [0, "error"],
+    "react-hooks/exhaustive-deps": [0, "error"]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "ignorePatterns": "*.min.js"
+}

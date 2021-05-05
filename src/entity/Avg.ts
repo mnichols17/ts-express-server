@@ -42,7 +42,7 @@ export class Avg extends BaseEntity {
     universe!: string;
 
     @Column()
-    // subuniverse!: string;
+    country!: string;
 
     @Column()
     character!: string;

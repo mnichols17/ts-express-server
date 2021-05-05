@@ -47,6 +47,8 @@ export class Review extends BaseEntity {
 
     // @Column()
     // subuniverse!: string;
+    @Column()
+    country!: string;
 
     @Column()
     character!: string;
